@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %} Filme {% endblock %}
+
+{% block botoes %}
+    {% if usuario_logado %}
+        <a href="{{url_for('logout')}}" class="split"><i class="fa fa-sign-out" aria-hidden="true"></i><b> Logout</b></a>
+        <a href="{{url_for('usuario', nickname=usuario_logado.nickname)}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b> Perfil</b></a>
+    {% else %}
+        <a href="{{url_for('cadastro')}}" class="split"><i class="fa fa-id-card-o" aria-hidden="true"></i><b> Cadastro</b></a>
+        <a href="{{url_for('login')}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b>Login</b></a>
+    {% endif %}
+{% endblock %}
+
+{% block generos %}
+    {% for genero in generos_buscados %}
+        <a href="{{url_for('filmes_por_genero', genero=genero.nome)}}"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ genero.nome }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div style="text-align: left; float: left; margin: 100px 150px 150px 100px;"><img src="data:image/{{ filme_buscado.capa.return_image_format() }};base64,{{ filme_buscado.capa.image_bytearray_to_encode64() }}" height="500" width="500"></div>
+<div class="centralizarlogin">
+    {% if usuario_logado %}
+        <div class="centralizarlogin" style="margin-top: 20px;">
+            {% if filme_salvo %}
+                <a href="{{url_for('exclui_filme_usuario', id_filme=filme_salvo.id)}}" class="button" style="background-color: Red"><b> - Excluir</b></a>
+            {% else %}
+                <a href="{{url_for('salva_filme_usuario', id_filme=filme_buscado.id)}}" class="button"><b> + Salvar</b></a>
+            {% endif %}
+        </div>
+        <table style="margin-left: auto; margin-right: auto; margin-top: 25px; width: 35%;">
+            <th style="font-size: 35pt; text-align: center;"> Informações </th>
+            <tr>
+                <td>
+                    <br> <b> Titulo: {{ filme_buscado.titulo }}</b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Ano: {{ filme_buscado.ano }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br>
+                    <b> Gêneros:</b>
+                    {% for genero in filme_buscado.generos %}
+                        <b> [{{ genero.nome }}]  </b>
+                    {% endfor %}
+                    <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Classificação Indicativa: {{ filme_buscado.certificado }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Rank: {{ filme_buscado.rank }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Sinopse: {{ filme_buscado.sinopse }} </b> <br>
+                    <hr style="height=10px; color=black">
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-left: auto; margin-right: 222px; width: 35%; height: 5; overflow-x: auto">
+            <table>
+                {% for ator in filme_buscado.elenco_principal %}
+                    <th style="font-size: 15pt; text-align: center;"> {{ ator.nome }} </th>
+                {% endfor %}
+                <tr>
+                    {% for ator in filme_buscado.elenco_principal %}
+                        <td style="text-align: center;">
+                            <a href="{{url_for('ator', id_ator = ator.id)}}">
+                                <img src="data:image/{{ ator.foto.return_image_format() }};base64,{{ ator.foto.image_bytearray_to_encode64() }}" height="80" width="80">
+                            </a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    {% else %}
+    <table style="margin-left: auto; margin-right: auto; margin-top: 100px; width: 35%;">
+        <th style="font-size: 35pt; text-align: center;"> Informações </th>
+        <tr>
+            <td>
+                <br> <b> Titulo: {{ filme_buscado.titulo }}</b> <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Ano: {{ filme_buscado.ano }} </b> <br>
+                <hr style="height=10px; color=black">
+                <br>
+                <b> Gêneros:</b>
+                {% for genero in filme_buscado.generos %}
+                    <b> [{{ genero.nome }}]  </b>
+                {% endfor %}
+                <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Classificação Indicativa: {{ filme_buscado.certificado }} </b> <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Rank: {{ filme_buscado.rank }} </b> <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Sinopse: {{ filme_buscado.sinopse }} </b> <br>
+                <hr style="height=10px; color=black">
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-left: auto; margin-right: 222px; width: 35%; height: 5; overflow-x: auto">
+        <table>
+            {% for ator in filme_buscado.elenco_principal %}
+                <th style="font-size: 15pt; text-align: center;"> {{ ator.nome }} </th>
+            {% endfor %}
+            <tr>
+                {% for ator in filme_buscado.elenco_principal %}
+                    <td style="text-align: center;">
+                        <a href="{{url_for('ator', id_ator = ator.id)}}">
+                            <img src="data:image/{{ ator.foto.return_image_format() }};base64,{{ ator.foto.image_bytearray_to_encode64() }}" height="80" width="80">
+                        </a>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block botoes %}
+    {% if usuario_logado %}
+        <a href="{{url_for('logout')}}" class="split"><i class="fa fa-sign-out" aria-hidden="true"></i><b> Logout</b></a>
+        <a href="{{url_for('usuario', nickname=usuario_logado.nickname)}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b> Perfil</b></a>
+    {% else %}
+        <a href="{{url_for('cadastro')}}" class="split"><i class="fa fa-id-card-o" aria-hidden="true"></i><b> Cadastro</b></a>
+        <a href="{{url_for('login')}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b>Login</b></a>
+    {% endif %}
+{% endblock %}
+
+{% block generos %}
+    {% for genero in generos_buscados %}
+        <a href="{{url_for('filmes_por_genero', genero=genero.nome)}}"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ genero.nome }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="centralizarlogin">
+    <table style="margin-left: auto; margin-right: auto; width: 35%;">
+        <th style="font-size: 35pt; text-align: center;"> Login </th>
+        <tr>
+            <td>
+                {% if message %}
+                    <div class="centralizar"><b>{{ message }}</b></div>
+                    <br>
+                {% endif %}
+
+                {% if form %}
+                <form action="{{url_for('login')}}" method="POST" style="padding:5px;">
+                    <div class="centralizar">
+
+                    <!-- nickname Field -->
+                        <br> <b>{{ form.nickname.label }}: </b> <br>
+                    {{ form.nickname }}
+                    <br>
+                    {% if form.nickname.errors %}
+                        {% for error in form.nickname.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- senha Field -->
+                    <br><b>{{ form.senha.label }}: </b> <br>
+                    {{ form.senha }}
+                    <br>
+                    {% if form.senha.errors %}
+                        {% for error in form.senha.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                    </div>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block botoes %}
+    {% if usuario_logado %}
+        <a href="{{url_for('logout')}}" class="split"><i class="fa fa-sign-out" aria-hidden="true"></i><b> Logout</b></a>
+        <a href="{{url_for('usuario', nickname=usuario_logado.nickname)}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b> Perfil</b></a>
+    {% else %}
+        <a href="{{url_for('cadastro')}}" class="split"><i class="fa fa-id-card-o" aria-hidden="true"></i><b> Cadastro</b></a>
+        <a href="{{url_for('login')}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b>Login</b></a>
+    {% endif %}
+{% endblock %}
+
+{% block generos %}
+    {% for genero in generos_buscados %}
+        <a href="{{url_for('filmes_por_genero', genero=genero.nome)}}"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ genero.nome }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div style="text-align: left; float: left; margin: 100px 150px 150px 100px;"><img src="data:image/{{ extensao }};base64,{{ imagem_usuario }}" height="500" width="500"></div>
+<div class="centralizarlogin">
+    <table style="margin-left: auto; margin-right: auto; width: 35%;">
+        <th style="font-size: 35pt; text-align: center;"> Informações </th>
+        <tr>
+            <td>
+                <br> <b> Nickname: {{ usuario_logado.nickname }}</b> <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Email: {{ usuario_logado.email }} </b> <br>
+                <hr style="height=10px; color=black">
+                <br> <b> Nome: {{ usuario_logado.nome }} </b> <br>
+                <hr style="height=10px; color=black">
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-left: auto; margin-right: auto; width: 35%; height: 5; overflow-x: auto;">
+        <table>
+            {% for filme in u_filmes_salvos %}
+                <th style="font-size: 15pt; text-align: center;"> {{ filme.titulo }} </th>
+            {% endfor %}
+            <tr>
+                {% for filme in u_filmes_salvos %}
+                    <td style="text-align: center;">
+                        <a href="{{url_for('filme', id_filme = filme.id)}}">
+                            <img src="data:image/{{ filme.capa.return_image_format() }};base64,{{ filme.capa.image_bytearray_to_encode64() }}" height="80" width="80">
+                        </a>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-left: auto; margin-right: 222px; width: 35%; height: 5; overflow-x: auto">
+        <table>
+            {% for ator in u_atores_salvos %}
+                <th style="font-size: 15pt; text-align: center;"> {{ ator.nome }} </th>
+            {% endfor %}
+            <tr>
+                {% for ator in u_atores_salvos %}
+                    <td style="text-align: center;">
+                        <a href="{{url_for('ator', id_ator = ator.id)}}">
+                            <img src="data:image/{{ ator.foto.return_image_format() }};base64,{{ ator.foto.image_bytearray_to_encode64() }}" height="80" width="80">
+                        </a>
+                    </td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

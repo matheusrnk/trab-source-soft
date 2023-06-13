@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %} Ator {% endblock %}
+
+{% block botoes %}
+    {% if usuario_logado %}
+        <a href="{{url_for('logout')}}" class="split"><i class="fa fa-sign-out" aria-hidden="true"></i><b> Logout</b></a>
+        <a href="{{url_for('usuario', nickname=usuario_logado.nickname)}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b> Perfil</b></a>
+    {% else %}
+        <a href="{{url_for('cadastro')}}" class="split"><i class="fa fa-id-card-o" aria-hidden="true"></i><b> Cadastro</b></a>
+        <a href="{{url_for('login')}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b>Login</b></a>
+    {% endif %}
+{% endblock %}
+
+{% block generos %}
+    {% for genero in generos_buscados %}
+        <a href="{{url_for('filmes_por_genero', genero=genero.nome)}}"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ genero.nome }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div style="text-align: left; float: left; margin: 100px 150px 150px 100px;"><img src="data:image/{{ ator_buscado.foto.return_image_format() }};base64,{{ ator_buscado.foto.image_bytearray_to_encode64() }}" height="500" width="500"></div>
+<div class="centralizarlogin">
+    {% if usuario_logado %}
+        <div class="centralizarlogin" style="margin-top: 20px;">
+            {% if ator_salvo %}
+                <a href="{{url_for('exclui_ator_usuario', id_ator=ator_salvo.id)}}" class="button" style="background-color: Red"><b> - Excluir</b></a>
+            {% else %}
+                <a href="{{url_for('salva_ator_usuario', id_ator=ator_buscado.id)}}" class="button"><b> + Salvar</b></a>
+            {% endif %}
+        </div>
+        <table style="margin-left: auto; margin-right: auto; margin-top: 25px; width: 35%;">
+            <th style="font-size: 35pt; text-align: center;"> Informações </th>
+            <tr>
+                <td>
+                    <br> <b> Nome: {{ ator_buscado.titulo }}</b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Data de nascimento: {{ ator_buscado.data_nasc }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Lugar de Nascimento: {{ ator_buscado.lugar_nasc }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Genero: {{ ator_buscado.genero }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Altura: {{ ator_buscado.altura }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Biografia: {{ ator_buscado.bio }} </b> <br>
+                    <hr style="height=10px; color=black">
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-left: auto; margin-right: auto; width: 35%; height: 5; overflow-x: auto;">
+            <table>
+                {% for filme in ator_buscado.filmes_principais %}
+                    <th style="font-size: 15pt; text-align: center;"> {{ filme.titulo }} </th>
+                {% endfor %}
+                <tr>
+                    {% for filme in u_filmes_salvos %}
+                        <td style="text-align: center;">
+                            <a href="{{url_for('filme', id_filme = filme.id)}}">
+                                <img src="data:image/{{ filme.capa.return_image_format() }};base64,{{ filme.capa.image_bytearray_to_encode64() }}" height="80" width="80">
+                            </a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    {% else %}
+        <table style="margin-left: auto; margin-right: auto; margin-top: 100px; width: 35%;">
+            <th style="font-size: 35pt; text-align: center;"> Informações </th>
+            <tr>
+                <td>
+                    <br> <b> Nome: {{ ator_buscado.titulo }}</b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Data de nascimento: {{ ator_buscado.data_nasc }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Lugar de Nascimento: {{ ator_buscado.lugar_nasc }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Genero: {{ ator_buscado.genero }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Altura: {{ ator_buscado.altura }} </b> <br>
+                    <hr style="height=10px; color=black">
+                    <br> <b> Biografia: {{ ator_buscado.bio }} </b> <br>
+                    <hr style="height=10px; color=black">
+                </td>
+            </tr>
+        </table>
+
+        <div style="margin-left: auto; margin-right: auto; width: 35%; height: 5; overflow-x: auto;">
+            <table>
+                {% for filme in ator_buscado.filmes_principais %}
+                    <th style="font-size: 15pt; text-align: center;"> {{ filme.titulo }} </th>
+                {% endfor %}
+                <tr>
+                    {% for filme in ator_buscado.filmes_principais %}
+                        <td style="text-align: center;">
+                            <a href="{{url_for('filme', id_filme = filme.id)}}">
+                                <img src="data:image/{{ filme.capa.return_image_format() }};base64,{{ filme.capa.image_bytearray_to_encode64() }}" height="80" width="80">
+                            </a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

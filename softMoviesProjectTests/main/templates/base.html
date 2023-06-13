@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device=width, initial-scale=1">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>{% block title %} {% endblock %} - Popcorn Find</title>
+</head>
+<body>
+    <div class="topnav">
+      <a class="active" href="#menu">
+          <div class="container" onclick="openNav();">
+          <div class="bar1"></div>
+          <div class="bar2"></div>
+          <div class="bar3"></div>
+          </div>
+      </a>
+        {% block botoes %}
+        {% endblock %}
+    </div>
+
+    <div id="mySidebar" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <a href="{{url_for('home')}}"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        <a href="{{url_for('melhores_filmes')}}"><i class="fa fa-bar-chart" aria-hidden="true"></i> Melhores Filmes</a>
+        <a onclick="openGenerosNav();"><i class="fa fa-folder-open" aria-hidden="true"></i> Gêneros</a>
+    </div>
+
+    <div id="generosSidebar" class="sidebar">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeGenerosNav()"><</a>
+        {% block generos %}
+        {% endblock %}
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <script>
+    function openNav() {
+      document.getElementById("mySidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+    }
+
+    function openGenerosNav() {
+      document.getElementById("generosSidebar").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    function closeGenerosNav() {
+      document.getElementById("generosSidebar").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+    }
+    </script>
+</body>
+</html>

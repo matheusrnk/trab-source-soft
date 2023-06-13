@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %} Cadastro {% endblock %}
+
+{% block botoes %}
+    {% if usuario_logado %}
+        <a href="{{url_for('logout')}}" class="split"><i class="fa fa-sign-out" aria-hidden="true"></i><b> Logout</b></a>
+        <a href="{{url_for('usuario', nickname=usuario_logado.nickname)}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b> Perfil</b></a>
+    {% else %}
+        <a href="{{url_for('cadastro')}}" class="split"><i class="fa fa-id-card-o" aria-hidden="true"></i><b> Cadastro</b></a>
+        <a href="{{url_for('login')}}" class="split"><i class="fa fa-fw fa-user" aria-hidden="true"></i><b>Login</b></a>
+    {% endif %}
+{% endblock %}
+
+{% block generos %}
+    {% for genero in generos_buscados %}
+        <a href="{{url_for('filmes_por_genero', genero=genero.nome)}}"><i class="fa fa-folder-open" aria-hidden="true"></i> {{ genero.nome }}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="centralizarlogin">
+    <table style="margin-left: auto; margin-right: auto; margin: 115px auto; width: 35%;">
+        <th style="font-size: 35pt; text-align: center; margin: 115px auto;"> Cadastro </th>
+        <tr>
+            <td style="margin: 115px auto;">
+                {% if message %}
+                    <div class="centralizar"><b>{{ message }}</b></div>
+                    <br>
+                {% endif %}
+
+                {% if form %}
+                <form action="{{url_for('cadastro')}}" method="POST" style="padding:5px;" enctype="multipart/form-data">
+                    <div class="centralizar">
+                    <!-- Foto Field -->
+                        <br> <b>{{ form.foto.label }}: </b><br>
+                    {{ form.foto }}
+                    <br>
+                    {% if form.foto.errors %}
+                        {% for error in form.foto.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- Nickname Field -->
+                    <br><b>{{ form.nickname.label }}:</b><br>
+                    {{ form.nickname }}
+                    <br>
+                    {% if form.nickname.errors %}
+                        {% for error in form.nickname.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- Email Field -->
+                    <br><b>{{ form.email.label }}:</b><br>
+                    {{ form.email }}
+                    <br>
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- senha Field -->
+                    <br><b>{{ form.senha.label }}:</b><br>
+                    {{ form.senha }}
+                    <br>
+                    {% if form.senha.errors %}
+                        {% for error in form.senha.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- Confirm senha Field -->
+                    <br><b>{{ form.confirma_senha.label }}:</b><br>
+                    {{ form.confirma_senha }}
+                    <br>
+                    {% if form.confirma_senha.errors %}
+                        {% for error in form.confirma_senha.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                    <br>
+                    <br>
+                    <!-- Full Name Field -->
+                    <br><b>{{ form.nome.label }}:</b><br>
+                    {{ form.nome }}
+                    <br>
+                    {% if form.nome.errors %}
+                        {% for error in form.nome.errors %}
+                        <b style="color:tomato;"> {{ error }} </b>
+                        <br>
+                        {% endfor %}
+                    {% endif %}
+                        <br>
+                        <br>
+                    {{ form.csrf_token }}
+                    {{ form.submit }}
+                    </div>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</div>
+{% endblock %}
